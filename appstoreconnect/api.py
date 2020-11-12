@@ -220,6 +220,17 @@ class Api:
 	def idfadeclaration_for_appstoreversion(self, appstoreversion_id):
 		return self._api_call("/v1/appStoreVersions/" + appstoreversion_id+ "/idfaDeclaration", HttpMethod.GET, None)
 
+	def getAppInfoId(self, app_id):
+		return self._api_call(f"/v1/apps/{app_id}/appInfos", HttpMethod.GET, None)
+
+	def UpdateAppCategories(self, appInfoId, primary, secondary):
+		if (len(secondary) != 0 and len(primary) != 0):
+			post_data = {'data':{'type':'appInfos','id':appInfoId,'relationships':{'primaryCategory':{'data':{'type':'appCategories','id':primary}},'secondaryCategory':{'data':{'type':'appCategories','id':secondary}}}}}
+		elif (len(primary) != 0 and len(secondary) == 0):
+			post_data = {'data':{'type':'appInfos','id':appInfoId,'relationships':{'primaryCategory':{'data':{'type':'appCategories','id':primary}}}}}
+		else:
+			return
+		return self._api_call(f"/v1/appInfos/{appInfoId}", HttpMethod.PATCH, post_data)
 
 	@property
 	def token(self):
