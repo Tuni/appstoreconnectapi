@@ -219,13 +219,25 @@ class Api:
 
 	def idfadeclaration_for_appstoreversion(self, appstoreversion_id):
 		return self._api_call("/v1/appStoreVersions/" + appstoreversion_id+ "/idfaDeclaration", HttpMethod.GET, None)
+
 	#appStoreVersions localization
-	def getAppStoreVersionLocalisations(self, appstoreversion_id):
+	def getAppStoreVersionLocalizations(self, appstoreversion_id):
 		return self._api_call(f"/v1/appStoreVersions/{appstoreversion_id}/appStoreVersionLocalizations", HttpMethod.GET, None)
 
 	def updateAppStoreVersionLocalizations(self, AppInfoLocalizationsId, attributes):
 		post_data = {'data': { 'type': 'appStoreVersionLocalizations', 'attributes': attributes, 'id': AppInfoLocalizationsId }}
 		return self._api_call(f"/v1/appStoreVersionLocalizations/{AppInfoLocalizationsId}", HttpMethod.PATCH, post_data)
+
+	#appStoreInfo localization
+	def getAppInfoId(self, app_id):
+		return self._api_call(f"/v1/apps/{app_id}/appInfos", HttpMethod.GET, None)
+
+	def getAppStoreInfoLocalizations(self, appstoreversion_id):
+		return self._api_call(f"/v1/appInfos/{appstoreversion_id}/appInfoLocalizations", HttpMethod.GET, None)
+
+	def updateAppStoreInfoLocalizations(self, AppInfoLocalizationsId, attributes):
+		post_data = {'data': { 'type': 'appInfoLocalizations', 'attributes': attributes, 'id': AppInfoLocalizationsId }}
+		return self._api_call(f"/v1/appInfoLocalizations/{AppInfoLocalizationsId}", HttpMethod.PATCH, post_data)
 
 	@property
 	def token(self):
