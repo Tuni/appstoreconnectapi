@@ -220,6 +220,9 @@ class Api:
 	def idfadeclaration_for_appstoreversion(self, appstoreversion_id):
 		return self._api_call("/v1/appStoreVersions/" + appstoreversion_id+ "/idfaDeclaration", HttpMethod.GET, None)
 
+	def updateAgeRatingDeclarations(self, attributes, id):
+		post_data = {'data': { 'type': 'ageRatingDeclarations', 'id': id, 'attributes': attributes }}
+		return self._api_call(f"/v1/ageRatingDeclarations/{id}", HttpMethod.PATCH, post_data)
 
 	@property
 	def token(self):
