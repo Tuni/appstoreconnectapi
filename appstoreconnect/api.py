@@ -209,9 +209,9 @@ class Api:
 		post_data = {'data': { 'id': appstoreversion_id, 'type': 'appStoreVersions', 'attributes': attributes , 'relationships': relationships }}
 		return self._api_call("/v1/appStoreVersions/" + appstoreversion_id, HttpMethod.PATCH, post_data)
 
-	def update_versionString_for_appstoreversion(self, appstoreversion_id, versionString):
-		attributes = { 'versionString': versionString }
-		self.update_appstoreversion(appstoreversion_id, attributes, {})
+	def update_versionString_for_appstoreversion(self, appstoreversion_id, versionString, copyrights):
+		attributes = { 'copyright': copyrights , 'versionString': versionString }
+		return self.update_appstoreversion(appstoreversion_id, attributes, {})
 
 	def associate_build_to_appstoreversion(self, build_id, appstoreversion_id):
 		post_data = {'data': { 'id': build_id, 'type': 'builds' }}
