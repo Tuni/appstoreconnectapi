@@ -420,7 +420,7 @@ class Api:
 		:param app_ip:
 		:return: an App resource
 		"""
-		return self._get_resource(App, app_ip)
+		return self._get_resource(AgeRatingDeclarations, app_ip)
 
 	def list_apps(self, filters=None, sort=None):
 		"""
@@ -646,6 +646,31 @@ class Api:
 			file.write_text(response, 'utf-8')
 
 		return response
+
+	def modify_Age_Rating_Declarations(self, Resource, args):
+		return self._modify_resource(Resource, args)
+
+	def list_app_infos(self, app_id: str):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/list_all_app_infos_for_an_app
+		:return: an iterator over AppCategory resources
+		"""
+		full_url = BASE_API + "/v1/apps/" + app_id + "/appInfos"
+		return self._get_resources(AppInfo, None, None, full_url)
+
+	def read_age_rating_declarations_info(self, appstoreversion_id):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/list_all_app_infos_for_an_app
+		:return: an iterator over Age Rating Declaration resources
+		"""
+		full_url = BASE_API + "/v1/appStoreVersions/" + appstoreversion_id + "/ageRatingDeclaration"
+		#return self._api_call(full_url, HttpMethod.GET, None)
+		return self._get_resource_adi(AgeRatingDeclarations, appstoreversion_id)
+
+	def _get_resource_adi(self, Resource, resource_id):
+		url = BASE_API + "/v1/appStoreVersions/" + resource_id + "/ageRatingDeclaration"
+		payload = self._api_call(url)
+		return Resource(payload.get('data', {}), self)
 
 	def download_sales_and_trends_reports(self, filters=None, save_to=None):
 		# setup required filters if not provided

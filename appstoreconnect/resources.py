@@ -93,6 +93,31 @@ class AppStoreVersion(Resource):
 	}
 	documentation = 'https://developer.apple.com/documentation/appstoreconnectapi/appstoreversion'
 
+class AgeRatingDeclarations(Resource):
+	endpoint = '/v1/ageRatingDeclarations'
+	attributes = ['alcoholTobaccoOrDrugUseOrReferences', 'gamblingAndContests', 'kidsAgeBand', 'medicalOrTreatmentInformation',
+	'profanityOrCrudeHumor', 'sexualContentOrNudity', 'unrestrictedWebAccess', 'gamblingSimulated', 'horrorOrFearThemes',
+	'matureOrSuggestiveThemes', 'sexualContentGraphicAndNudity', 'violenceCartoonOrFantasy', 'violenceRealistic', 'violenceRealisticProlongedGraphicOrSadistic']
+	type = 'ageRatingDeclarations'
+	documentation = 'https://developer.apple.com/documentation/appstoreconnectapi/ageratingdeclaration'
+
+class AppInfo(Resource):
+	endpoint = '/v1/appInfos'
+	type = 'appInfos'
+	attributes = ['appStoreAgeRating', 'appStoreState', 'brazilAgeRating', 'kidsAgeBand']
+	relationships = {
+		'app': {'multiple': False},
+		'appInfoLocalizations': {'multiple': True},
+		'primaryCategory': {'multiple': False},
+		'primarySubcategoryOne': {'multiple': False},
+		'primarySubcategoryTwo': {'multiple': False},
+		'secondaryCategory': {'multiple': False},
+		'secondarySubcategoryOne': {'multiple': False},
+		'secondarySubcategoryTwo': {'multiple': False}
+
+	}
+	documentation = 'https://developer.apple.com/documentation/appstoreconnectapi/appinfo'
+
 # App Resources
 
 class App(Resource):
