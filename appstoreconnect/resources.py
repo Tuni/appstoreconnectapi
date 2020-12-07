@@ -98,6 +98,7 @@ class AgeRatingDeclarations(Resource):
 	attributes = ['alcoholTobaccoOrDrugUseOrReferences', 'gamblingAndContests', 'kidsAgeBand', 'medicalOrTreatmentInformation',
 	'profanityOrCrudeHumor', 'sexualContentOrNudity', 'unrestrictedWebAccess', 'gamblingSimulated', 'horrorOrFearThemes',
 	'matureOrSuggestiveThemes', 'sexualContentGraphicAndNudity', 'violenceCartoonOrFantasy', 'violenceRealistic', 'violenceRealisticProlongedGraphicOrSadistic']
+	relationships = {}
 	type = 'ageRatingDeclarations'
 	documentation = 'https://developer.apple.com/documentation/appstoreconnectapi/ageratingdeclaration'
 
