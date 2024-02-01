@@ -870,12 +870,20 @@ class Api:
 		return self._get_resource(AppCategory, app_category_id)
 
 	def list_all_available_territories_for_an_app(self, app_id):
- 		"""
- 		:reference: https://developer.apple.com/documentation/appstoreconnectapi/list_all_available_territories_for_an_app
- 		:return: an iterator over Territory resources
- 		"""
- 		full_url = BASE_API + "/v1/apps/" + app_id + "/availableTerritories?limit=200"
- 		return self._get_resources(Territory, None, None, full_url)
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/list_all_available_territories_for_an_app
+		:return: an iterator over Territory resources
+		"""
+		full_url = BASE_API + "/v1/apps/" + app_id + "/availableTerritories?limit=200"
+		return self._get_resources(Territory, None, None, full_url)
+
+	def territoryAvailabilities(self, app_id):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/read_app_availablity_territories
+		:return: Read the territory availablity for a specific app.
+		"""
+		full_url = BASE_API + "/v2/appAvailabilities/" + app_id + "/territoryAvailabilities?limit=200&include=territory"
+		return self._get_resources(TerritoryAvailability, None, None, full_url)
 
 	def list_territories(self):
 		"""
