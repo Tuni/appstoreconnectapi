@@ -249,8 +249,10 @@ class Api:
 		else:
 			raise APIError("Unknown HTTP method")
 
+		content_type = None
 
-		content_type = r.headers['content-type']
+		if 'content-type' in r.headers :
+			content_type = r.headers['content-type']
 
 		if content_type in [ "application/json", "application/vnd.api+json" ]:
 			payload = r.json()
@@ -272,6 +274,8 @@ class Api:
 		else:
 			if not 200 <= r.status_code <= 299:
 				raise APIError("HTTP error [%d][%s]" % (r.status_code, r.content))
+			if isinstance(r, requests.Response) and r.status_code != 204:
+				r = r.json()
 			return r
 
 	def _submit_stats(self, event_type):
@@ -365,9 +369,7 @@ class Api:
 		:return: an iterator over BetaTester resources
 		"""
 		full_url = BASE_API + "/v1/betaGroups/" + betaGroup.id + "/betaTesters"
-		return self._get_resources(BetaGroup, None, None, full_url)
-		#return self._api_call(BASE_API + "/v1/betaGroups/" + betaGroup.id + "/betaTesters", HttpMethod.GET)
-		#return self._get_resources(BetaGroup, filters, sort)
+		return self._get_resources(BetaTester, None, None, full_url)
 
 	def read_beta_tester_information(self, beta_tester_id: str):
 		"""
@@ -405,7 +407,7 @@ class Api:
 		return requests.delete(url=url, data = json.dumps(post_data), headers = headers)
 
 
-	def create_beta_group(self, app: App, name: str, publicLinkEnabled: bool = None, publicLinkLimit: int = None, publicLinkLimitEnabled: bool = None) -> BetaGroup:
+	def create_beta_group(self, app: App, name: str, publicLinkEnabled: bool = None, publicLinkLimit: int = None, publicLinkLimitEnabled: bool = None, feedbackEnabled: bool = None, hasAccessToAllBuilds: bool = None, isInternalGroup: bool = None) -> BetaGroup:
 		"""
 		:reference:https://developer.apple.com/documentation/appstoreconnectapi/create_a_beta_group
 		:return: a BetaGroup resource

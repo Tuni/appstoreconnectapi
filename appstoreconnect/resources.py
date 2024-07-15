@@ -318,11 +318,14 @@ class BetaAppReviewSubmission(Resource):
 
 class User(Resource):
 	endpoint = '/v1/users'
+	type = 'users'
+	attributes = ['firstName', 'lastName', 'roles', 'provisioningAllowed', 'allAppsVisible', 'username']
 	documentation = 'https://developer.apple.com/documentation/appstoreconnectapi/user/attributes'
 
 
 class UserInvitation(Resource):
 	endpoint = '/v1/userInvitations'
+	attributes = ['email', 'firstName', 'lastName', 'roles', 'expirationDate', 'provisioningAllowed', 'allAppsVisible']
 	documentation = 'https://developer.apple.com/documentation/appstoreconnectapi/userinvitation/attributes'
 
 
