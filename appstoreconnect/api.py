@@ -272,6 +272,8 @@ class Api:
 		else:
 			if not 200 <= r.status_code <= 299:
 				raise APIError("HTTP error [%d][%s]" % (r.status_code, r.content))
+			if isinstance(r, requests.Response) and r.status_code != 204:
+				r = r.json()
 			return r
 
 	def _submit_stats(self, event_type):

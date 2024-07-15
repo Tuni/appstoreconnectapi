@@ -123,7 +123,7 @@ class AgeRatingDeclarations(Resource):
 	endpoint = '/v1/ageRatingDeclarations'
 	attributes = ['alcoholTobaccoOrDrugUseOrReferences', 'gamblingAndContests', 'kidsAgeBand', 'medicalOrTreatmentInformation',
 	'profanityOrCrudeHumor', 'sexualContentOrNudity', 'unrestrictedWebAccess', 'gamblingSimulated', 'horrorOrFearThemes',
-	'matureOrSuggestiveThemes', 'sexualContentGraphicAndNudity', 'violenceCartoonOrFantasy', 'violenceRealistic', 'violenceRealisticProlongedGraphicOrSadistic']
+	'matureOrSuggestiveThemes', 'sexualContentGraphicAndNudity', 'violenceCartoonOrFantasy', 'violenceRealistic', 'violenceRealisticProlongedGraphicOrSadistic', 'ageRatingOverride', 'seventeenPlus']
 	relationships = {}
 	type = 'ageRatingDeclarations'
 	documentation = 'https://developer.apple.com/documentation/appstoreconnectapi/ageratingdeclaration'
