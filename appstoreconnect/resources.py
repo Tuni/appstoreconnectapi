@@ -13,21 +13,25 @@ class Resource(ABC):
 		if item in self._data.get('attributes', {}):
 			return self._data.get('attributes', {})[item]
 		if item in self._data.get('relationships', {}):
-			def callable():
-				# Try to fetch relationship
-				nonlocal item
-				is_resources = item[-1] == 's'
-				try:
-					item_cls = getattr(sys.modules[__name__], item[0].upper() + (item[1:-1] if is_resources else item[1:]))
-				except AttributeError:
-					item_cls = Resource
-				url = self._data.get('relationships', {})[item]['links']['related']
-				# List of resources
-				if is_resources:
-					return self._api._get_resources(item_cls, full_url=url)
-				else:
-					return self._api._get_related_resource(item_cls, full_url=url)
-			return callable
+			#try to get already included relationship
+			try :
+				return self._data.get('relationships', {})[item]['data']
+			except KeyError:
+				def callable():
+					# Try to fetch relationship
+					nonlocal item
+					is_resources = item[-1] == 's'
+					try:
+						item_cls = getattr(sys.modules[__name__], item[0].upper() + (item[1:-1] if is_resources else item[1:]))
+					except AttributeError:
+						item_cls = Resource
+					url = self._data.get('relationships', {})[item]['links']['related']
+					# List of resources
+					if is_resources:
+						return self._api._get_resources(item_cls, full_url=url)
+					else:
+						return self._api._get_related_resource(item_cls, full_url=url)
+				return callable
 
 		raise AttributeError('%s have no attributes %s' % (self.type_name, item))
 
@@ -119,7 +123,7 @@ class AgeRatingDeclarations(Resource):
 	endpoint = '/v1/ageRatingDeclarations'
 	attributes = ['alcoholTobaccoOrDrugUseOrReferences', 'gamblingAndContests', 'kidsAgeBand', 'medicalOrTreatmentInformation',
 	'profanityOrCrudeHumor', 'sexualContentOrNudity', 'unrestrictedWebAccess', 'gamblingSimulated', 'horrorOrFearThemes',
-	'matureOrSuggestiveThemes', 'sexualContentGraphicAndNudity', 'violenceCartoonOrFantasy', 'violenceRealistic', 'violenceRealisticProlongedGraphicOrSadistic']
+	'matureOrSuggestiveThemes', 'sexualContentGraphicAndNudity', 'violenceCartoonOrFantasy', 'violenceRealistic', 'violenceRealisticProlongedGraphicOrSadistic', 'ageRatingOverride', 'seventeenPlus']
 	relationships = {}
 	type = 'ageRatingDeclarations'
 	documentation = 'https://developer.apple.com/documentation/appstoreconnectapi/ageratingdeclaration'
@@ -152,6 +156,15 @@ class Territory(Resource):
 	attributes = 'currency'
 	relationships = {}
 	documentation = 'https://developer.apple.com/documentation/appstoreconnectapi/territory'
+
+class TerritoryAvailability(Resource):
+	endpoint = 'v2/territoryAvailabilities'
+	type = 'territoryAvailabilities'
+	attributes = ['available', 'contentStatuses', 'preOrderEnabled', 'preOrderPublishDate', 'releaseDate']
+	relationships = {
+		'territory' : {'multiple': False}
+	}
+	documentation = "https://developer.apple.com/documentation/appstoreconnectapi/territoryavailability"
 
 
 class AppStoreReviewDetail(Resource):
