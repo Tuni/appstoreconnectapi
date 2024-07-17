@@ -158,7 +158,7 @@ class Territory(Resource):
 	documentation = 'https://developer.apple.com/documentation/appstoreconnectapi/territory'
 
 class TerritoryAvailability(Resource):
-	endpoint = 'v2/territoryAvailabilities'
+	endpoint = '/v1/territoryAvailabilities'
 	type = 'territoryAvailabilities'
 	attributes = ['available', 'contentStatuses', 'preOrderEnabled', 'preOrderPublishDate', 'releaseDate']
 	relationships = {

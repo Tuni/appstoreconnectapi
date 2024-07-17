@@ -887,6 +887,14 @@ class Api:
 		full_url = BASE_API + "/v2/appAvailabilities/" + app_id + "/territoryAvailabilities?limit=200&include=territory"
 		return self._get_resources(TerritoryAvailability, None, None, full_url)
 
+	def modify_territory_availability(self, territoryAvailability: TerritoryAvailability, available: bool):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/modify_the_territory_availabilty_for_an_app_pre-order
+		:return: the modified TerritoryAvailability resource
+		"""
+
+		return self._modify_resource(territoryAvailability, locals())
+
 	def list_territories(self):
 		"""
 		:reference: https://developer.apple.com/documentation/appstoreconnectapi/list_territories
