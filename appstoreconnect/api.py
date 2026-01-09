@@ -687,6 +687,39 @@ class Api:
 
 		return self._create_resource(BetaAppReviewSubmission, locals())
 
+	def list_review_submissions(self, filters=None):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/list_beta_app_review_submissions
+		:return: an iterator over BetaAppReviewSubmission resources
+		"""
+		return self._get_resources(ReviewSubmission, filters)
+
+	def create_review_submission(self, platform: str, app: App) -> ReviewSubmission:
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/submit_an_app_for_beta_review
+		:return: a ReviewSubmission resource
+		"""
+
+		return self._create_resource(ReviewSubmission, locals())
+
+	def modify_review_submission(self, reviewSubmission: ReviewSubmission, submitted: bool ) -> ReviewSubmission:
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/submit_an_app_for_beta_review
+		:return: a ReviewSubmission resource
+		"""
+
+		attributes = { 'submitted': submitted }
+
+		return self._modify_resource(reviewSubmission, attributes)
+
+	def create_review_submission_item(self, appStoreVersion: AppStoreVersion, reviewSubmission: ReviewSubmission) -> ReviewSubmissionItem:
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/submit_an_app_for_beta_review
+		:return: a ReviewSubmissionItem resource
+		"""
+
+		return self._create_resource(ReviewSubmissionItem, locals())
+
 	def list_beta_app_review_submissions(self, filters=None):
 		"""
 		:reference: https://developer.apple.com/documentation/appstoreconnectapi/list_beta_app_review_submissions

@@ -121,7 +121,7 @@ class AppStoreVersionLocalization(Resource):
 
 class AgeRatingDeclarations(Resource):
 	endpoint = '/v1/ageRatingDeclarations'
-	attributes = ['alcoholTobaccoOrDrugUseOrReferences', 'gamblingAndContests', 'kidsAgeBand', 'medicalOrTreatmentInformation',
+	attributes = ['alcoholTobaccoOrDrugUseOrReferences', 'gambling', 'contests', 'kidsAgeBand', 'medicalOrTreatmentInformation',
 	'profanityOrCrudeHumor', 'sexualContentOrNudity', 'unrestrictedWebAccess', 'gamblingSimulated', 'horrorOrFearThemes',
 	'matureOrSuggestiveThemes', 'sexualContentGraphicAndNudity', 'violenceCartoonOrFantasy', 'violenceRealistic', 'violenceRealisticProlongedGraphicOrSadistic', 'ageRatingOverride', 'seventeenPlus']
 	relationships = {}
@@ -326,6 +326,24 @@ class BetaAppReviewSubmission(Resource):
 	}
 	documentation = 'https://developer.apple.com/documentation/appstoreconnectapi/betaAppReviewSubmission/attributes'
 
+class ReviewSubmission(Resource):
+	endpoint = '/v1/reviewSubmissions'
+	type = 'reviewSubmissions'
+	attributes = ['platform', 'status', 'submitted']
+	relationships = {
+		'app': {'multiple': False}
+	}
+	documentation = 'https://developer.apple.com/documentation/appstoreconnectapi/reviewsubmission'
+
+class ReviewSubmissionItem(Resource):
+	endpoint = '/v1/reviewSubmissionItems'
+	type = 'reviewSubmissionItems'
+	attributes = ['state']
+	relationships = {
+		'appStoreVersion': {'multiple': False},
+		'reviewSubmission': {'multiple': False}
+	}
+	documentation = 'https://developer.apple.com/documentation/appstoreconnectapi/reviewsubmissionitem'
 
 # Users and Roles
 
