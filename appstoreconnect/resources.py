@@ -121,9 +121,7 @@ class AppStoreVersionLocalization(Resource):
 
 class AgeRatingDeclarations(Resource):
 	endpoint = '/v1/ageRatingDeclarations'
-	attributes = ['alcoholTobaccoOrDrugUseOrReferences', 'gambling', 'contests', 'kidsAgeBand', 'medicalOrTreatmentInformation',
-	'profanityOrCrudeHumor', 'sexualContentOrNudity', 'unrestrictedWebAccess', 'gamblingSimulated', 'horrorOrFearThemes',
-	'matureOrSuggestiveThemes', 'sexualContentGraphicAndNudity', 'violenceCartoonOrFantasy', 'violenceRealistic', 'violenceRealisticProlongedGraphicOrSadistic', 'ageRatingOverride', 'seventeenPlus']
+	attributes = ['advertising', 'ageAssurance', 'ageRatingOverride', 'alcoholTobaccoOrDrugUseOrReferences', 'contests', 'gambling', 'gamblingSimulated', 'gunsOrOtherWeapons', 'healthOrWellnessTopics', 'horrorOrFearThemes', 'kidsAgeBand', 'lootBox', 'matureOrSuggestiveThemes', 'medicalOrTreatmentInformation', 'messagingAndChat', 'parentalControls', 'profanityOrCrudeHumor', 'sexualContentGraphicAndNudity', 'sexualContentOrNudity', 'seventeenPlus', 'unrestrictedWebAccess', 'userGeneratedContent', 'violenceCartoonOrFantasy', 'violenceRealistic', 'violenceRealisticProlongedGraphicOrSadistic']
 	relationships = {}
 	type = 'ageRatingDeclarations'
 	documentation = 'https://developer.apple.com/documentation/appstoreconnectapi/ageratingdeclaration'

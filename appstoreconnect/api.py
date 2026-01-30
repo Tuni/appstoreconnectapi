@@ -155,6 +155,7 @@ class Api:
 		url = "%s%s/%s" % (BASE_API, Resource.endpoint, Resource.id)
 		if self._debug:
 			print(post_data)
+
 		payload = self._api_call(url, HttpMethod.PATCH, post_data)
 
 		return type(Resource)(payload.get('data', {}), self)
