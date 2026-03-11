@@ -423,6 +423,7 @@ class AppInfo(Resource):
 	attributes = ['appStoreAgeRating', 'appStoreState', 'brazilAgeRating', 'kidsAgeBand']
 	relationships = {
 		'app': {'multiple': False},
+		'ageRatingDeclaration': {'multiple': False},
 		'appInfoLocalizations': {'multiple': True},
 		'primaryCategory': {'multiple': False},
 		'primarySubcategoryOne': {'multiple': False},

@@ -536,14 +536,20 @@ class Api:
 		"""
 		return self._modify_resource(Resource, args)
 
-	def read_age_rating_declarations_info(self, app_store_version_id):
+	def read_age_rating_declarations_info(self, app_info_id):
 		"""
-		:reference: https://developer.apple.com/documentation/appstoreconnectapi/read_the_age_rating_declaration_information_of_an_app_store_version
-		:return: an iterator over AgeRatingDeclarations resources
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/get-v1-appinfos-_id_-relationships-ageratingdeclaration
+		:param app_info_id:
+		:return: an AgeRatingDeclarations resource
 		"""
-		url = BASE_API + "/v1/appStoreVersions/" + app_store_version_id + "/ageRatingDeclaration"
+		url = BASE_API + "/v1/appInfos/" + app_info_id + "/relationships/ageRatingDeclaration"
 		payload = self._api_call(url)
-		return AgeRatingDeclarations(payload.get('data', {}), self)
+		payload_data = payload.get('data', {})
+		if not payload_data:
+			return None
+		if 'attributes' not in payload_data:
+			return self._get_resource(AgeRatingDeclarations, payload_data.get('id'))
+		return AgeRatingDeclarations(payload_data, self)
 
 	def list_all_app_screenshots_sets_for_an_app_store_version_localization(self, app_store_version_localization_id):
 		"""
