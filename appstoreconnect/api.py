@@ -547,8 +547,6 @@ class Api:
 		payload_data = payload.get('data', {})
 		if not payload_data:
 			return None
-		if 'attributes' not in payload_data:
-			return self._get_resource(AgeRatingDeclarations, payload_data.get('id'))
 		return AgeRatingDeclarations(payload_data, self)
 
 	def list_all_app_screenshots_sets_for_an_app_store_version_localization(self, app_store_version_localization_id):
