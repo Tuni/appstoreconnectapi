@@ -932,12 +932,13 @@ class Api:
 				return None
 			raise
 
-	def create_app_availability_v2(self, app_id, territory_ids, availableInNewTerritories=True):
+	def create_app_availability_v2(self, app_id, territory_ids, availableInNewTerritories=False):
 		"""
 		:reference: https://developer.apple.com/documentation/appstoreconnectapi/post-v2-appavailabilities
 		:return: the created AppAvailability resource
 		"""
-		territory_ids = list(dict.fromkeys(territory_ids))
+		selected_territory_ids = set(territory_ids)
+		territory_ids = [territory.id for territory in self.list_territories()]
 		territory_availabilities = []
 		included = []
 
@@ -955,7 +956,7 @@ class Api:
 				'id': local_id,
 				'type': 'territoryAvailabilities',
 				'attributes': {
-					'available': True
+					'available': territory_id in selected_territory_ids
 				},
 				'relationships': {
 					'territory': {
@@ -991,7 +992,7 @@ class Api:
 		payload = self._api_call(BASE_API + "/v2/appAvailabilities", HttpMethod.POST, post_data)
 		return AppAvailability(payload.get('data', {}), self)
 
-	def get_or_create_app_availability_v2(self, app_id, territory_ids, availableInNewTerritories=True):
+	def get_or_create_app_availability_v2(self, app_id, territory_ids, availableInNewTerritories=False):
 		app_availability = self.read_app_availability_v2(app_id)
 		if app_availability:
 			return app_availability
