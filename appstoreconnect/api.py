@@ -919,12 +919,94 @@ class Api:
 		full_url = BASE_API + "/v1/apps/" + app_id + "/availableTerritories?limit=200"
 		return self._get_resources(Territory, None, None, full_url)
 
-	def territoryAvailabilities(self, app_id):
+	def read_app_availability_v2(self, app_id):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/get-v1-apps-_id_-appavailabilityv2
+		:return: an AppAvailability resource or None when no app availability exists yet
+		"""
+		full_url = BASE_API + "/v1/apps/" + app_id + "/appAvailabilityV2"
+		try:
+			return self._get_related_resource(AppAvailability, full_url)
+		except APIError as e:
+			if getattr(e, 'status_code', None) == 404:
+				return None
+			raise
+
+	def create_app_availability_v2(self, app_id, territory_ids, availableInNewTerritories=True):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/post-v2-appavailabilities
+		:return: the created AppAvailability resource
+		"""
+		territory_ids = list(dict.fromkeys(territory_ids))
+		territory_availabilities = []
+		included = []
+
+		for territory_id in territory_ids:
+			local_id = "${territory-%s}" % territory_id
+			territory_availabilities.append({
+				'id': local_id,
+				'type': 'territoryAvailabilities'
+			})
+			included.append({
+				'id': local_id,
+				'type': 'territoryAvailabilities',
+				'attributes': {
+					'available': True
+				},
+				'relationships': {
+					'territory': {
+						'data': {
+							'id': territory_id,
+							'type': 'territories'
+						}
+					}
+				}
+			})
+
+		post_data = {
+			'data': {
+				'type': AppAvailability.type,
+				'attributes': {
+					'availableInNewTerritories': availableInNewTerritories
+				},
+				'relationships': {
+					'app': {
+						'data': {
+							'id': app_id,
+							'type': App.type
+						}
+					},
+					'territoryAvailabilities': {
+						'data': territory_availabilities
+					}
+				}
+			},
+			'included': included
+		}
+
+		payload = self._api_call(BASE_API + "/v2/appAvailabilities", HttpMethod.POST, post_data)
+		return AppAvailability(payload.get('data', {}), self)
+
+	def get_or_create_app_availability_v2(self, app_id, territory_ids, availableInNewTerritories=True):
+		app_availability = self.read_app_availability_v2(app_id)
+		if app_availability:
+			return app_availability
+
+		try:
+			return self.create_app_availability_v2(app_id, territory_ids, availableInNewTerritories)
+		except APIError as e:
+			if getattr(e, 'status_code', None) == 409:
+				app_availability = self.read_app_availability_v2(app_id)
+				if app_availability:
+					return app_availability
+			raise
+
+	def territoryAvailabilities(self, app_availability_id):
 		"""
 		:reference: https://developer.apple.com/documentation/appstoreconnectapi/get-v2-appavailabilities-_id_-relationships-territoryavailabilities
 		:return: an iterator over TerritoryAvailability resources
 		"""
-		full_url = BASE_API + "/v2/appAvailabilities/" + app_id + "/territoryAvailabilities?limit=200&include=territory"
+		full_url = BASE_API + "/v2/appAvailabilities/" + app_availability_id + "/territoryAvailabilities?limit=200&include=territory"
 		return self._get_resources(TerritoryAvailability, None, None, full_url)
 
 	def modify_territory_availability(self, territoryAvailability: TerritoryAvailability, available: bool):

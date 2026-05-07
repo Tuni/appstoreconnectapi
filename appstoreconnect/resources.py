@@ -164,6 +164,16 @@ class TerritoryAvailability(Resource):
 	}
 	documentation = "https://developer.apple.com/documentation/appstoreconnectapi/territoryavailability"
 
+class AppAvailability(Resource):
+	endpoint = '/v2/appAvailabilities'
+	type = 'appAvailabilities'
+	attributes = ['availableInNewTerritories']
+	relationships = {
+		'app': {'multiple': False},
+		'territoryAvailabilities': {'multiple': True},
+	}
+	documentation = "https://developer.apple.com/documentation/appstoreconnectapi/appavailabilityv2"
+
 
 class AppStoreReviewDetail(Resource):
 	endpoint = '/v1/appStoreReviewDetails'
