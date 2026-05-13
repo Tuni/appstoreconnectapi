@@ -949,10 +949,6 @@ class Api:
 				'type': 'territoryAvailabilities'
 			})
 			included.append({
-				'id': territory_id,
-				'type': 'territories'
-			})
-			included.append({
 				'id': local_id,
 				'type': 'territoryAvailabilities',
 				'attributes': {
