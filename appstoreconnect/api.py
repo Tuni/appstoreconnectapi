@@ -726,6 +726,13 @@ class Api:
 
 		return self._create_resource(ReviewSubmissionItem, locals())
 
+	def modify_review_submission_item(self, reviewSubmissionItem: ReviewSubmissionItem, resolved: bool = None, removed: bool = None) -> ReviewSubmissionItem:
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/patch-v1-reviewsubmissionitems-_id_
+		:return: a ReviewSubmissionItem resource
+		"""
+		return self._modify_resource(reviewSubmissionItem, locals())
+
 	def list_review_submission_items(self, reviewSubmission: ReviewSubmission):
 		"""
 		:reference: https://developer.apple.com/documentation/appstoreconnectapi/get-v1-reviewsubmissions-_id_-items
