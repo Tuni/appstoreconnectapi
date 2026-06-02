@@ -726,6 +726,14 @@ class Api:
 
 		return self._create_resource(ReviewSubmissionItem, locals())
 
+	def list_review_submission_items(self, reviewSubmission: ReviewSubmission):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/get-v1-reviewsubmissions-_id_-items
+		:return: an iterator over ReviewSubmissionItem resources
+		"""
+		full_url = BASE_API + "/v1/reviewSubmissions/" + reviewSubmission.id + "/items?limit=200&include=appStoreVersion"
+		return self._get_resources(ReviewSubmissionItem, None, None, full_url)
+
 	def list_beta_app_review_submissions(self, filters=None):
 		"""
 		:reference: https://developer.apple.com/documentation/appstoreconnectapi/list_beta_app_review_submissions
