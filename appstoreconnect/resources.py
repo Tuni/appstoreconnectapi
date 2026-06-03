@@ -346,7 +346,7 @@ class ReviewSubmission(Resource):
 class ReviewSubmissionItem(Resource):
 	endpoint = '/v1/reviewSubmissionItems'
 	type = 'reviewSubmissionItems'
-	attributes = ['state']
+	attributes = ['state', 'resolved', 'removed']
 	relationships = {
 		'appStoreVersion': {'multiple': False},
 		'reviewSubmission': {'multiple': False}
