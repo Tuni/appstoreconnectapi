@@ -795,6 +795,27 @@ class Api:
 		return self._modify_resource(appStoreReviewDetail, attributes)
 
 	# Provisioning
+	def register_a_new_bundle_id(self, identifier: str, name: str, platform: str, seedId: str):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/register_a_new_bundle_id
+		:return: an iterator over BundleId resources
+		"""
+		return self._create_resource(BundleId, locals())
+
+	def modify_a_bundle_id(self, bundleId: BundleId, name: str):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/modify_a_bundle_id
+		:return: an iterator over BundleId resources
+		"""
+		return self._modify_resource(bundleId, locals())
+
+	def delete_a_bundle_id(self, bundleId: BundleId):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/delete_a_bundle_id
+		:return: None
+		"""
+		return self._delete_resource(bundleId)
+
 	def list_bundle_ids(self, filters=None, sort=None):
 		"""
 		:reference: https://developer.apple.com/documentation/appstoreconnectapi/list_bundle_ids
@@ -808,6 +829,27 @@ class Api:
 		:return: an iterator over Certificate resources
 		"""
 		return self._get_resources(Certificate, filters, sort)
+
+	def read_and_download_certificate_information(self, certificate: Certificate ):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/read_and_download_certificate_information
+		:return: an iterator over Certificate resources
+		"""
+		return self._get_resource(certificate)
+
+	def create_a_certificate(self, certificateType: str):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/create_a_certificate
+		:return: an iterator over Certificate resources
+		"""
+		return self._create_resource(Certificate, locals())
+
+	def revoke_a_certificate(self, certificate: Certificate ):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/revoke_a_certificate
+		:return: an iterator over Certificate resources
+		"""
+		return self._create_resource(certificate)
 
 	def list_devices(self, filters=None, sort=None):
 		"""
@@ -843,6 +885,13 @@ class Api:
 		:return: a Profile resource
 		"""
 		return self._get_resource(Profile, profileId)
+
+	def create_a_profile(self, name: str, profileType: str, bundleId: BundleId, certificates: [Certificate]):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/create_a_profile
+		:return: an iterator over Profile resources
+		"""
+		return self._create_resource(Profile, locals())
 
 	def get_build_info(self, build_id):
 		"""
