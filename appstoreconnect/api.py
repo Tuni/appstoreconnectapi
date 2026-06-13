@@ -566,6 +566,22 @@ class Api:
 		url = BASE_API + "/v1/appScreenshotSets/" + app_screen_shot_set_id + "/appScreenshots"
 		return self._get_resources(AppScreenshot, None, None, url)
 
+	def list_all_app_previews_for_an_app_preview_set(self, app_store_version_localization_id):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/list_all_app_previews_for_an_app_preview_set
+		:return: an iterator over AppPreviewSet resources
+		"""
+		url = BASE_API + "/v1/appPreviewSets/" + app_store_version_localization_id + "/appPreviews"
+		return self._get_resources(AppPreview, None, None, url)
+
+	def list_all_app_preview_sets_for_an_app_store_version_localization(self, app_store_version_localization_id):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/list_all_app_preview_sets_for_an_app_store_version_localization
+		:return: an iterator over AppPreviewSet resources
+		"""
+		url = BASE_API + "/v1/appStoreVersionLocalizations/" + app_store_version_localization_id + "/appPreviewSets"
+		return self._get_resources(AppPreviewSet, None, None, url)
+
 	def create_an_app_screenshot_set(self, screenshotDisplayType: str, appStoreVersionLocalization: AppStoreVersionLocalization):
 		"""
 		:reference: https://developer.apple.com/documentation/appstoreconnectapi/create_an_app_screenshot_set
@@ -573,12 +589,26 @@ class Api:
 		"""
 		return self._create_resource(AppScreenshotSet, locals())
 
+	def create_an_app_preview_set(self, previewType: str, appStoreVersionLocalization: AppStoreVersionLocalization):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/create_an_app_preview_set
+		:return: an iterator over AppPreviewSet resources
+		"""
+		return self._create_resource(AppPreviewSet, locals())
+
 	def delete_an_app_screenshot_set(self, appScreenshotSet: AppScreenshotSet):
 		"""
 		:reference: https://developer.apple.com/documentation/appstoreconnectapi/delete_an_app_screenshot_set
 		:return: None
 		"""
 		return self._delete_resource(appScreenshotSet)
+
+	def delete_an_app_preview_set(self, appPreviewSet: AppPreviewSet):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/delete_an_app_preview_set
+		:return: an iterator over AppPreviewSet resources
+		"""
+		return self._delete_resource(appPreviewSet)
 
 
 	def modify_an_app_screenshot(self, app_screenshot: AppScreenshot, sourceFileChecksum: str, uploaded: bool):
@@ -589,6 +619,13 @@ class Api:
 		attributes = {'sourceFileChecksum':sourceFileChecksum, 'uploaded':uploaded}
 		return self._modify_resource(app_screenshot, attributes)
 
+	def modify_an_app_preview(self, appPreview: AppPreview, sourceFileChecksum: str, uploaded: bool):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/modify_an_app_preview
+		:return: an iterator over AppPreview resources
+		"""
+		return self._modify_resource(appPreview, locals())
+
 	def create_an_asset_reservation(self, appScreenshotSet: AppScreenshotSet, fileSize: int, fileName: str):
 		"""
 		:reference: https://developer.apple.com/documentation/appstoreconnectapi/uploading_assets_to_app_store_connect
@@ -596,10 +633,30 @@ class Api:
 		"""
 		return self._create_resource(AppScreenshot, locals())
 
+	def create_a_preview_reservation(self, appPreviewSet: AppPreviewSet, fileSize: int, fileName: str):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/app_metadata/uploading_app_previews
+		:return: an iterator over AppScreenshot resources
+		"""
+		return self._create_resource(AppPreview, locals())
+
 	def upload_the_asset(self, upload_operation, binary):
 		"""
 		:reference: https://developer.apple.com/documentation/appstoreconnectapi/uploading_assets_to_app_store_connect
 		:return: the upload HTTP response
+		"""
+		headers = {}
+		url = upload_operation['url']
+
+		for header in upload_operation['requestHeaders']:
+			headers[header['name']] = header['value']
+
+		return requests.put(url=url, data = binary, headers = headers)
+
+	def upload_the_preview(self, upload_operation, binary):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/app_metadata/uploading_app_previews
+		:return: an json answer
 		"""
 		headers = {}
 		url = upload_operation['url']
@@ -616,12 +673,26 @@ class Api:
 		"""
 		return self._get_resource(AppScreenshot, app_screenshot_id)
 
+	def read_app_preview_information(self, app_preview_id):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/read_app_preview_information
+		:return: an iterator over AppPreview resource
+		"""
+		return self._get_resource(AppPreview, app_preview_id)
+
 	def delete_an_app_screenshot(self, app_screenshot):
 		"""
 		:reference: https://developer.apple.com/documentation/appstoreconnectapi/delete_an_app_screenshot
 		:return: None
 		"""
 		return self._delete_resource(app_screenshot)
+
+	def delete_an_app_preview(self, app_preview: AppPreview):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/delete_an_app_preview
+		:return: an iterator over AppPreview resource
+		"""
+		return self._delete_resource(app_preview)
 
 	def replace_all_app_screenshots_for_an_app_screenshot_set(self, app_screenshot_set, data):
 		"""
@@ -630,6 +701,14 @@ class Api:
 		"""
 		post_data = {"data": data }
 		return self._api_call(BASE_API + "/v1/appScreenshotSets/" + app_screenshot_set.id + "/relationships/appScreenshots", HttpMethod.PATCH, post_data)
+
+	def replace_all_app_previews_for_an_app_preview_set(self, app_preview_set, data):
+		"""
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/replace_all_app_previews_for_an_app_preview_set
+		:return: an iterator over AppPreviewSet resource
+		"""
+		post_data = {"data": data }
+		return self._api_call(BASE_API + "/v1/appPreviewSets/" + app_preview_set.id + "/relationships/appPreviews", HttpMethod.PATCH, post_data)
 
 
 	# Build Resources
