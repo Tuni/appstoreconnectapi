@@ -22,7 +22,8 @@ class Resource(ABC):
 					nonlocal item
 					is_resources = item[-1] == 's'
 					try:
-						item_cls = getattr(sys.modules[__name__], item[0].upper() + (item[1:-1] if is_resources else item[1:]))
+						item_cls_name = item[:-3] + 'y' if item.endswith('ies') else (item[:-1] if is_resources else item)
+						item_cls = getattr(sys.modules[__name__], item_cls_name[0].upper() + item_cls_name[1:])
 					except AttributeError:
 						item_cls = Resource
 					url = self._data.get('relationships', {})[item]['links']['related']
@@ -379,6 +380,16 @@ class BundleId(Resource):
 		'app': {'multiple': False},
 	}
 	documentation = 'https://developer.apple.com/documentation/appstoreconnectapi/bundleid/attributes'
+
+
+class BundleIdCapability(Resource):
+	endpoint = '/v1/bundleIdCapabilities'
+	type = 'bundleIdCapabilities'
+	attributes = ['capabilityType', 'settings']
+	relationships = {
+		'bundleId': {'multiple': False},
+	}
+	documentation = 'https://developer.apple.com/documentation/appstoreconnectapi/bundle-id-capabilities'
 
 
 class Certificate(Resource):

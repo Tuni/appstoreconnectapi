@@ -802,6 +802,45 @@ class Api:
 		"""
 		return self._get_resources(BundleId, filters, sort)
 
+	def read_bundle_id(self, bundle_id: str) -> BundleId:
+		"""Read an Apple resource ID, rather than a bundle identifier string."""
+		return self._get_resource(BundleId, bundle_id)
+
+	def register_new_bundle_id(self, name: str, identifier: str, platform: str, seedId: str = None) -> BundleId:
+		"""Register a bundle ID. Capabilities and profiles are separate writes.
+
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/bundle-ids
+		"""
+		return self._create_resource(BundleId, locals())
+
+	def modify_bundle_id(self, bundleId: BundleId, name: str) -> BundleId:
+		"""Rename a bundle ID without changing its identifier or platform."""
+		return self._modify_resource(bundleId, {'name': name})
+
+	def list_bundle_id_capabilities(self, bundle_id: str):
+		"""Return a paginated iterator of capabilities for an Apple resource ID."""
+		url = "%s%s/%s/bundleIdCapabilities" % (BASE_API, BundleId.endpoint, bundle_id)
+		return self._get_resources(BundleIdCapability, full_url=url)
+
+	def read_bundle_id_capability(self, capability_id: str) -> BundleIdCapability:
+		return self._get_resource(BundleIdCapability, capability_id)
+
+	def enable_bundle_id_capability(self, bundleId: BundleId, capabilityType: str, settings=None) -> BundleIdCapability:
+		"""Enable a capability using Apple's capability type and settings schema.
+
+		APP_GROUPS enables the capability only; it does not register or assign groups.
+		:reference: https://developer.apple.com/documentation/appstoreconnectapi/bundle-id-capabilities
+		"""
+		return self._create_resource(BundleIdCapability, locals())
+
+	def modify_bundle_id_capability(self, capability: BundleIdCapability, settings) -> BundleIdCapability:
+		"""Update settings only. An empty list is sent; None omits settings."""
+		return self._modify_resource(capability, {'settings': settings})
+
+	def disable_bundle_id_capability(self, capability: BundleIdCapability):
+		"""Disable a capability. Existing provisioning profiles may need regeneration."""
+		self._delete_resource(capability)
+
 	def list_certificates(self, filters=None, sort=None):
 		"""
 		:reference: https://developer.apple.com/documentation/appstoreconnectapi/list_and_download_certificates
