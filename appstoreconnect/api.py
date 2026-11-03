@@ -253,7 +253,7 @@ class Api:
 		content_type = None
 
 		if 'content-type' in r.headers :
-			content_type = r.headers['content-type']
+			content_type = r.headers['content-type'].split(';', 1)[0].strip().lower()
 
 		if content_type in [ "application/json", "application/vnd.api+json" ]:
 			payload = r.json()
