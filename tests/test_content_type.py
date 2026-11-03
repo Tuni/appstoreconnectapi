@@ -11,6 +11,7 @@ class ContentTypeTests(unittest.TestCase):
     def call(self, content_type, payload):
         api = Api.__new__(Api)
         api._debug = False
+        api.submit_stats = False
         api._submit_stats = False
         response = Mock(headers={"content-type": content_type}, status_code=200)
         response.json.return_value = payload
